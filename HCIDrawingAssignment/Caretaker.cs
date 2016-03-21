@@ -21,7 +21,15 @@ namespace HCIDrawingAssignment
 
         public void add(Momento action)
         {
-            actionList.Add(action);
+            if (firstUndo == 1)
+            {
+                firstUndo = 0;
+            }
+            else
+            {
+                actionList.Add(action);
+            }
+            undoneList.Clear();
         }
 
 
@@ -35,15 +43,25 @@ namespace HCIDrawingAssignment
                 undoneList.Clear();
                 undoneList.Add(currentScreen);
                 firstUndo = 1;
+                return tempMomento;
             }
-           
-            actionList.Remove(tempMomento);
-            return tempMomento;
+            else
+            {
+                actionList.Remove(tempMomento);
+                undoneList.Add(tempMomento);
+                if (actionList.Any())
+                {
+                    return actionList.Last();
+                }
+                else
+                {
+                    return tempMomento;
+                }
+            }
         }
 
         public Momento redo()
         {
-            firstUndo = 0;
             Momento tempMomento = undoneList.Last();
             actionList.Add(tempMomento);
             undoneList.Remove(tempMomento);
