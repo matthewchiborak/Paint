@@ -50,6 +50,9 @@
             this.modeLabel = new System.Windows.Forms.Label();
             this.canvasBox = new System.Windows.Forms.PictureBox();
             this.selectedColorBox = new System.Windows.Forms.PictureBox();
+            this.drawingSaveDialog = new System.Windows.Forms.SaveFileDialog();
+            this.drawingOpenDialog = new System.Windows.Forms.OpenFileDialog();
+            this.selectedLabel = new System.Windows.Forms.Label();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.canvasBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.selectedColorBox)).BeginInit();
@@ -68,6 +71,7 @@
             this.flowLayoutPanel1.Controls.Add(this.colourButton);
             this.flowLayoutPanel1.Controls.Add(this.selectedColorBox);
             this.flowLayoutPanel1.Controls.Add(this.selectButton);
+            this.flowLayoutPanel1.Controls.Add(this.selectedLabel);
             this.flowLayoutPanel1.Controls.Add(this.copyButton);
             this.flowLayoutPanel1.Controls.Add(this.cutButton);
             this.flowLayoutPanel1.Controls.Add(this.pasteButton);
@@ -156,7 +160,7 @@
             // 
             this.selectButton.Location = new System.Drawing.Point(3, 248);
             this.selectButton.Name = "selectButton";
-            this.selectButton.Size = new System.Drawing.Size(75, 23);
+            this.selectButton.Size = new System.Drawing.Size(52, 23);
             this.selectButton.TabIndex = 7;
             this.selectButton.Text = "Select";
             this.selectButton.UseVisualStyleBackColor = true;
@@ -294,6 +298,23 @@
             this.selectedColorBox.TabStop = false;
             this.selectedColorBox.Click += new System.EventHandler(this.selectedColorBox_Click);
             // 
+            // drawingSaveDialog
+            // 
+            this.drawingSaveDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.drawingSaveDialog_FileOk);
+            // 
+            // drawingOpenDialog
+            // 
+            this.drawingOpenDialog.FileName = "openFileDialog1";
+            this.drawingOpenDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.drawingOpenDialog_FileOk);
+            // 
+            // selectedLabel
+            // 
+            this.selectedLabel.AutoSize = true;
+            this.selectedLabel.Location = new System.Drawing.Point(61, 245);
+            this.selectedLabel.Name = "selectedLabel";
+            this.selectedLabel.Size = new System.Drawing.Size(0, 13);
+            this.selectedLabel.TabIndex = 19;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -335,6 +356,9 @@
         private System.Windows.Forms.Label modeLabel;
         private System.Windows.Forms.PictureBox canvasBox;
         private System.Windows.Forms.PictureBox selectedColorBox;
+        private System.Windows.Forms.SaveFileDialog drawingSaveDialog;
+        private System.Windows.Forms.OpenFileDialog drawingOpenDialog;
+        private System.Windows.Forms.Label selectedLabel;
     }
 }
 
