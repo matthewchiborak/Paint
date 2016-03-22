@@ -58,6 +58,27 @@ namespace HCIDrawingAssignment
             startPoint.X = location.X;
             startPoint.Y = location.Y;
         }
+        public void translate(Point displacement)
+        {
+            startPoint.X = startPoint.X + displacement.X; 
+            startPoint.Y = startPoint.Y + displacement.Y;
+            endPoint.X = endPoint.X + displacement.X;
+            endPoint.Y = endPoint.Y + displacement.Y;
+        }
+
+        public void movePolygonOrFreehandToHere(Point location)
+        {
+            Point displacement = new Point(location.X - startPoint.X, location.Y - startPoint.Y);
+
+            foreach(var myLine in freehandLineList)
+            {
+                myLine.translate(displacement);
+            }
+            startPoint.X = location.X ;
+            startPoint.Y = location.Y;
+            endPoint.X = endPoint.X + displacement.X;
+            endPoint.Y = endPoint.Y + displacement.Y;
+        }
 
         public bool checkIfCursorOn(Point location)
         {

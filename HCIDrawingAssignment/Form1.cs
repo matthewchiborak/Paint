@@ -268,10 +268,13 @@ namespace HCIDrawingAssignment
 
                     foreach(var myLine in tempLineList)
                     {
-                        freehandLineList.Add(myLine);
+                        freehandLineList.Add(new LineShape(myLine.getShapeColor(), myLine.getStartPoint(), myLine.getEndPoint()));
                     }
 
-                    canvasGraphicList.Add(new FreehandShape(copiedGraphic.getShapeColor(), freehandLineList));
+                    FreehandShape tempShape = new FreehandShape(copiedGraphic.getShapeColor(), freehandLineList);
+                    Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
+                    tempShape.movePolygonOrFreehandToHere(midScreen);
+                    canvasGraphicList.Add(tempShape);
                     freehandLineList = new List<LineShape>();
                     isDrawing = true;
                     redrawAllGraphics();
@@ -345,10 +348,13 @@ namespace HCIDrawingAssignment
 
                     foreach (var myLine in tempLineList)
                     {
-                        freehandLineList.Add(myLine);
+                        freehandLineList.Add(new LineShape(myLine.getShapeColor(), myLine.getStartPoint(), myLine.getEndPoint()));
                     }
 
-                    canvasGraphicList.Add(new PolygonShape(copiedGraphic.getShapeColor(), freehandLineList));
+                    PolygonShape tempShape = new PolygonShape(copiedGraphic.getShapeColor(), freehandLineList);
+                    Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
+                    tempShape.movePolygonOrFreehandToHere(midScreen);
+                    canvasGraphicList.Add(tempShape);
                     freehandLineList = new List<LineShape>();
                     isDrawing = true;
                     redrawAllGraphics();
@@ -577,6 +583,7 @@ namespace HCIDrawingAssignment
                         {
                             if (myGraphic.checkIfCursorOn(e.Location))
                             {
+                                shapeCaretaker.add(new Momento(canvasGraphicList));
                                 selectedIndex = wantedIndex;
                                 selectedLabel.Text = selectedIndex.ToString();
                                 selectNotFound = false;
@@ -741,7 +748,7 @@ namespace HCIDrawingAssignment
         {
             if(currentMode == "Select")
             {
-                if(isDrawing)
+                if (isDrawing)
                 {
                     if (selectNotFound)
                     {
@@ -762,7 +769,14 @@ namespace HCIDrawingAssignment
                     }
                     else
                     {
-                        canvasGraphicList.ElementAt(selectedIndex).moveToHere(e.Location);
+                        if (canvasGraphicList.ElementAt(selectedIndex).getShapeType() == "Freehand" || canvasGraphicList.ElementAt(selectedIndex).getShapeType() == "Polygon")
+                        {
+                            canvasGraphicList.ElementAt(selectedIndex).movePolygonOrFreehandToHere(e.Location);
+                        }
+                        else
+                        {
+                            canvasGraphicList.ElementAt(selectedIndex).moveToHere(e.Location);
+                        }
                         redrawAllGraphics();
                     }
                 }

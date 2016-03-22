@@ -41,21 +41,21 @@ namespace HCIDrawingAssignment
             if (firstUndo == 0)
             {
                 undoneList.Clear();
-                undoneList.Add(currentScreen);
+                undoneList.Add(new Momento(currentScreen.getCanvasGraphicList()));
                 firstUndo = 1;
-                return tempMomento;
+                return new Momento(tempMomento.getCanvasGraphicList());
             }
             else
             {
                 actionList.Remove(tempMomento);
-                undoneList.Add(tempMomento);
+                undoneList.Add(new Momento(tempMomento.getCanvasGraphicList()));
                 if (actionList.Any())
                 {
-                    return actionList.Last();
+                    return new Momento(actionList.Last().getCanvasGraphicList());
                 }
                 else
                 {
-                    return tempMomento;
+                    return new Momento(tempMomento.getCanvasGraphicList());
                 }
             }
         }
@@ -63,9 +63,9 @@ namespace HCIDrawingAssignment
         public Momento redo()
         {
             Momento tempMomento = undoneList.Last();
-            actionList.Add(tempMomento);
+            actionList.Add(new Momento(tempMomento.getCanvasGraphicList()));
             undoneList.Remove(tempMomento);
-            return tempMomento;
+            return new Momento(tempMomento.getCanvasGraphicList());
         }
 
         public bool checkIfCanUndo()
