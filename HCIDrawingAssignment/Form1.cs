@@ -27,10 +27,11 @@ namespace HCIDrawingAssignment
         bool selectNotFound;
 
         Caretaker shapeCaretaker;
-
-        //List<Graphics> canvasGraphicList;
+        
         List<ShapeGraphic> canvasGraphicList;
         List<LineShape> freehandLineList;
+
+        ShapeGraphic copiedGraphic;
 
         public Form1()
         {
@@ -45,7 +46,7 @@ namespace HCIDrawingAssignment
             prevImage = canvasBox.Image;
             firstPolygonPoint = true;
             shapeCaretaker = new Caretaker();
-            selectedIndex = 0;
+            selectedIndex = -1;
             selectNotFound = true;
         }
 
@@ -193,17 +194,172 @@ namespace HCIDrawingAssignment
 
         private void copyButton_Click(object sender, EventArgs e)
         {
+            if (currentMode == "Polygon")
+            {
+                shapeCaretaker.add(new Momento(canvasGraphicList));
+                canvasGraphicList.Add(new PolygonShape(selectedColor, freehandLineList));
+                redrawAllGraphics();
+                freehandLineList = new List<LineShape>();
+                isDrawing = false;
+                firstPolygonPoint = true;
+            }
 
+            if (canvasGraphicList.Any() && selectedIndex >= 0)
+            {
+                copiedGraphic = canvasGraphicList.ElementAt(selectedIndex);
+
+                currentMode = "Select";
+                modeLabel.Text = selectedIndex + " Copied";
+            }
         }
 
         private void cutButton_Click(object sender, EventArgs e)
         {
+            if (currentMode == "Polygon")
+            {
+                shapeCaretaker.add(new Momento(canvasGraphicList));
+                canvasGraphicList.Add(new PolygonShape(selectedColor, freehandLineList));
+                redrawAllGraphics();
+                freehandLineList = new List<LineShape>();
+                isDrawing = false;
+                firstPolygonPoint = true;
+            }
 
+            if (canvasGraphicList.Any() && selectedIndex >= 0)
+            {
+                shapeCaretaker.add(new Momento(canvasGraphicList));
+                copiedGraphic = canvasGraphicList.ElementAt(selectedIndex);
+                canvasGraphicList.RemoveAt(selectedIndex);
+                currentMode = "Select";
+                modeLabel.Text = selectedIndex + " Cut";
+                isDrawing = true;
+                redrawAllGraphics();
+                isDrawing = false;
+                selectedIndex = -1;
+            }
         }
 
         private void pasteButton_Click(object sender, EventArgs e)
         {
+            if (currentMode == "Polygon")
+            {
+                shapeCaretaker.add(new Momento(canvasGraphicList));
+                canvasGraphicList.Add(new PolygonShape(selectedColor, freehandLineList));
+                redrawAllGraphics();
+                freehandLineList = new List<LineShape>();
+                isDrawing = false;
+                firstPolygonPoint = true;
+            }
 
+            if (currentMode == "Freehand")
+            {
+                currentMode = "Paste";
+            }
+
+            if(copiedGraphic != null)
+            {
+                if (copiedGraphic.getShapeType() == "Freehand")
+                {
+                    //Create the momento
+                    shapeCaretaker.add(new Momento(canvasGraphicList));
+                    //Get the lines
+                    freehandLineList = new List<LineShape>();
+                    List<LineShape> tempLineList = copiedGraphic.getFreehandLineList();
+
+                    foreach(var myLine in tempLineList)
+                    {
+                        freehandLineList.Add(myLine);
+                    }
+
+                    canvasGraphicList.Add(new FreehandShape(copiedGraphic.getShapeColor(), freehandLineList));
+                    freehandLineList = new List<LineShape>();
+                    isDrawing = true;
+                    redrawAllGraphics();
+                    isDrawing = false;
+
+                }
+                if (copiedGraphic.getShapeType() == "Line")
+                {
+                    shapeCaretaker.add(new Momento(canvasGraphicList));
+                    LineShape tempLine = new LineShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
+                    Point midScreen = new Point(canvasBox.Width/2,canvasBox.Height/2);
+                    tempLine.moveToHere(midScreen);
+                    canvasGraphicList.Add(tempLine);
+                    isDrawing = true;
+                    redrawAllGraphics();
+                    isDrawing = false;
+                }
+                if (copiedGraphic.getShapeType() == "Rectangle" || copiedGraphic.getShapeType() == "Square")
+                {
+                    shapeCaretaker.add(new Momento(canvasGraphicList));
+
+                    if (copiedGraphic.getShapeType() == "Square")
+                    {
+                        SquareShape tempShape = new SquareShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
+                        Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
+                        tempShape.moveToHere(midScreen);
+                        canvasGraphicList.Add(tempShape);
+                    }
+                    else if (copiedGraphic.getShapeType() == "Rectangle")
+                    {
+                        RectangleShape tempShape = new RectangleShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
+                        Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
+                        tempShape.moveToHere(midScreen);
+                        canvasGraphicList.Add(tempShape);
+                    }
+                    isDrawing = true;
+                    redrawAllGraphics();
+                    isDrawing = false;
+                }
+
+                if (copiedGraphic.getShapeType() == "Ellipse" || copiedGraphic.getShapeType() == "Circle")
+                {
+                   
+                    shapeCaretaker.add(new Momento(canvasGraphicList));
+
+                    if (copiedGraphic.getShapeType() == "Circle")
+                    {
+                        CircleShape tempShape = new CircleShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
+                        Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
+                        tempShape.moveToHere(midScreen);
+                        canvasGraphicList.Add(tempShape);
+                    }
+                    else if (copiedGraphic.getShapeType() == "Ellipse")
+                    {
+                        EllipseShape tempShape = new EllipseShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
+                        Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
+                        tempShape.moveToHere(midScreen);
+                        canvasGraphicList.Add(tempShape);
+                    }
+                    isDrawing = true;
+                    redrawAllGraphics();
+                    isDrawing = false;
+                }
+                if (copiedGraphic.getShapeType() == "Polygon")
+                {
+                    //Create the momento
+                    shapeCaretaker.add(new Momento(canvasGraphicList));
+                    //Get the lines
+                    freehandLineList = new List<LineShape>();
+                    List<LineShape> tempLineList = copiedGraphic.getFreehandLineList();
+
+                    foreach (var myLine in tempLineList)
+                    {
+                        freehandLineList.Add(myLine);
+                    }
+
+                    canvasGraphicList.Add(new PolygonShape(copiedGraphic.getShapeColor(), freehandLineList));
+                    freehandLineList = new List<LineShape>();
+                    isDrawing = true;
+                    redrawAllGraphics();
+                    isDrawing = false;
+                }
+            }
+
+            if (currentMode == "Paste")
+            {
+                currentMode = "Freehand";
+            }
         }
 
         private void undoButton_Click(object sender, EventArgs e)
@@ -408,6 +564,30 @@ namespace HCIDrawingAssignment
             {
                 //Make it so will only draw while moving if the mouse if clicked
                 isDrawing = true;
+            }
+
+            if (currentMode == "Select")
+            {
+                if (isDrawing)
+                {
+                    if (selectNotFound)
+                    {
+                        int wantedIndex = 0;
+                        foreach (var myGraphic in canvasGraphicList)
+                        {
+                            if (myGraphic.checkIfCursorOn(e.Location))
+                            {
+                                selectedIndex = wantedIndex;
+                                selectedLabel.Text = selectedIndex.ToString();
+                                selectNotFound = false;
+                            }
+                            else
+                            {
+                                wantedIndex++;
+                            }
+                        }
+                    }
+                }
             }
         }
 
