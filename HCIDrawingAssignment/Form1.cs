@@ -743,7 +743,6 @@ namespace HCIDrawingAssignment
         private void loadButton_Click(object sender, EventArgs e)
         {
             string fileContent = "";
-            //fileContent = File.ReadAllText();
 
             OpenFileDialog drawingOpenFileDialog = new OpenFileDialog();
             drawingOpenDialog.Filter = "Text Files (.txt)|*.txt";
@@ -752,7 +751,6 @@ namespace HCIDrawingAssignment
             if(drawingOpenDialog.ShowDialog() == DialogResult.OK)
             {
                 string wantedFile = drawingOpenDialog.FileName;
-                //string wantedFileWithDir = Path.GetDirectoryName(wantedFile);
 
                 fileContent = File.ReadAllText(wantedFile);
 
@@ -770,6 +768,28 @@ namespace HCIDrawingAssignment
                     if(mode == "Type")
                     {
                         mode = shapeEntry;
+                    }
+                    else if(mode == "Pin")
+                    {
+                        //Split up the line containing the child and parent information
+                        string[] childParentInfo = shapeEntry.Split(',');
+
+                        //Assign the shapes their parents and children
+                        int currentInfoIndex = 0;
+                        foreach (var graphicNeedingRelation in canvasGraphicList)
+                        {
+                            string[] childAndParent = childParentInfo[currentInfoIndex].Split(' ');
+                            if(childAndParent[0] != "null")
+                            {
+                                graphicNeedingRelation.giveChild(canvasGraphicList.ElementAt(Int32.Parse(childAndParent[0])));
+                            }
+                            if (childAndParent[1] != "null")
+                            {
+                                graphicNeedingRelation.giveParent(canvasGraphicList.ElementAt(Int32.Parse(childAndParent[1])));
+                            }
+
+                            currentInfoIndex++;
+                        }
                     }
                     else if(mode == "Freehand")
                     {
@@ -1399,6 +1419,14 @@ namespace HCIDrawingAssignment
             string pictureName = drawingSaveDialog.FileName;
             string fileContent = "";
 
+            //Assign Id to each
+            int idToAssign = 0;
+            foreach (var myGraphic in canvasGraphicList)
+            {
+                myGraphic.assignId(idToAssign);
+                idToAssign++;
+            }
+
             foreach (var myGraphic in canvasGraphicList)
             {
                 if (myGraphic.getShapeType() == "Freehand")
@@ -1478,8 +1506,32 @@ namespace HCIDrawingAssignment
                 }
             }
 
+            //Add the last line to keep track of which shapes are pinned to one another
+            fileContent = fileContent + "Pin\n";
+            //child parent, child parent,etc.  if null -> null, 
+            foreach (var myGraphic in canvasGraphicList)
+            {
+                if(myGraphic.hasChild())
+                {
+                    fileContent = fileContent + myGraphic.getChild().getId().ToString() + " ";
+                }
+                else
+                {
+                    fileContent = fileContent + "null ";
+                }
+                if(myGraphic.hasParent())
+                {
+                    fileContent = fileContent + myGraphic.getParent().getId().ToString() + ",";
+                }
+                else
+                {
+                    fileContent = fileContent + "null,";
+                }
+            }
+
+            fileContent = fileContent + "\n";
+
             //Put the content into the file
-            //pictureName = "C:\\Users\\Chiborak\\Desktop\\" + pictureName + ".txt";
             pictureName = pictureName + ".txt";
             System.IO.File.WriteAllText(@pictureName, fileContent);
 
