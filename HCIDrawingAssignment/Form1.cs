@@ -922,17 +922,22 @@ namespace HCIDrawingAssignment
                 if (selectedIndex >= 0)
                 {
                     shapeCaretaker.add(new Momento(canvasGraphicList));
-                    copiedGraphic = canvasGraphicList.ElementAt(selectedIndex);
-                    canvasGraphicList.RemoveAt(selectedIndex);
+                    //copiedGraphic = canvasGraphicList.ElementAt(selectedIndex);
+                    //canvasGraphicList.RemoveAt(selectedIndex);
 
                     int wantedIndex = 0;
                     foreach (var myGraphic in canvasGraphicList)
                     {
                         if (myGraphic.checkIfCursorOn(e.Location) && wantedIndex != selectedIndex)
                         {
-                            canvasGraphicList.ElementAt(selectedIndex).Pin(myGraphic);
-                            currentMode = "Select";
-                            modeLabel.Text = "Shapes Pinned";
+                            //Check if the shapes to be pins aren't already pinned to the shapes
+                            //if (!canvasGraphicList.ElementAt(selectedIndex).checkIfAlreadyPinned(myGraphic))
+                            if(!checkIfPinned(canvasGraphicList.ElementAt(selectedIndex), myGraphic))
+                            {
+                                canvasGraphicList.ElementAt(selectedIndex).Pin(myGraphic);
+                                currentMode = "Select";
+                                modeLabel.Text = "Shapes Pinned";
+                            }
                             break;
                         }
                         else
@@ -1056,7 +1061,7 @@ namespace HCIDrawingAssignment
                     tempEnd.Y = tempEnd.X;
                     canvasGraphicList.Add(new SquareShape(selectedColor, tempStart, tempEnd));
                 }
-                else if (currentMode == "Rectangle")
+                else //(currentMode == "Rectangle")
                 {
                     canvasGraphicList.Add(new RectangleShape(selectedColor, tempStart, tempEnd));
                 }
@@ -1109,7 +1114,7 @@ namespace HCIDrawingAssignment
                     tempEnd.Y = tempEnd.X;
                     canvasGraphicList.Add(new CircleShape(selectedColor, tempStart, tempEnd));
                 }
-                else if (currentMode == "Ellipse")
+                else //if (currentMode == "Ellipse")
                 {
                     canvasGraphicList.Add(new EllipseShape(selectedColor, tempStart, tempEnd));
                 }
@@ -1529,7 +1534,7 @@ namespace HCIDrawingAssignment
                 }
             }
 
-            fileContent = fileContent + "\n";
+            //fileContent = fileContent + "\n";
 
             //Put the content into the file
             pictureName = pictureName + ".txt";
@@ -1540,6 +1545,55 @@ namespace HCIDrawingAssignment
         private void drawingOpenDialog_FileOk(object sender, CancelEventArgs e)
         {
 
+        }
+
+        private bool checkIfPinned(ShapeGraphic pinnee, ShapeGraphic pinner)
+        {
+            //Get all shapes in the pinnee
+            List<ShapeGraphic> pinneeShapes = new List<ShapeGraphic>();
+            ShapeGraphic currentParent = pinnee;
+            ShapeGraphic currentChild = pinnee;
+            pinneeShapes.Add(pinnee);
+            while(currentChild.hasChild())
+            {
+                currentChild = currentChild.getChild();
+                pinneeShapes.Add(currentChild);
+            }
+            while (currentParent.hasParent())
+            {
+                currentParent = currentParent.getParent();
+                pinneeShapes.Add(currentParent);
+            }
+
+            //Get all shapes in the pinner
+            List<ShapeGraphic> pinnerShapes = new List<ShapeGraphic>();
+            currentParent = pinner;
+            currentChild = pinner;
+            pinnerShapes.Add(pinner);
+            while (currentChild.hasChild())
+            {
+                currentChild = currentChild.getChild();
+                pinnerShapes.Add(currentChild);
+            }
+            while (currentParent.hasParent())
+            {
+                currentParent = currentParent.getParent();
+                pinnerShapes.Add(currentParent);
+            }
+
+            //Check that there's no crossover
+            foreach(var pinnerObj in pinnerShapes)
+            {
+                foreach(var pinneeOjb in pinneeShapes)
+                {
+                    if(pinnerObj == pinneeOjb)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

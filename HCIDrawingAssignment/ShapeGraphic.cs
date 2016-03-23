@@ -168,11 +168,91 @@ namespace HCIDrawingAssignment
             }
         }
 
+        public bool checkIfAlreadyPinned(ShapeGraphic childToPin)
+        {
+            bool result = false;
+
+            if(childToPin == this)
+            {
+                return true;
+            }
+            if(childShapeGraphic!=null)
+            {
+                result = childShapeGraphic.checkIfAlreadyPinned(childToPin);
+                if(result == true)
+                {
+                    return true;
+                }
+            }
+            if(parentShapeGraphic!=null)
+            {
+                result = parentShapeGraphic.checkIfAlreadyPinned(childToPin);
+                if (result == true)
+                {
+                    return true;
+                }
+            }
+
+            //CHeck all the childToPin's children and parents
+            if(childToPin.hasChild())
+            {
+                if (childShapeGraphic != null)
+                {
+                    result = childShapeGraphic.checkIfAlreadyPinned(childToPin.getChild());
+                    if (result == true)
+                    {
+                        return true;
+                    }
+                }
+                if (parentShapeGraphic != null)
+                {
+                    result = parentShapeGraphic.checkIfAlreadyPinned(childToPin.getChild());
+                    if (result == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (childToPin.hasParent())
+            {
+                if (childShapeGraphic != null)
+                {
+                    result = childShapeGraphic.checkIfAlreadyPinned(childToPin.getParent());
+                    if (result == true)
+                    {
+                        return true;
+                    }
+                }
+                if (parentShapeGraphic != null)
+                {
+                    result = parentShapeGraphic.checkIfAlreadyPinned(childToPin.getParent());
+                    if (result == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         //Recursively find the child who doesn't have a child yet
         public void Pin(ShapeGraphic childToPin)
         {
-            if (childToPin == null)
+            if (childShapeGraphic == null)
             {
+                //Find the highest parent in the child graphic
+                while(true)
+                {
+                    if(childToPin.hasParent())
+                    {
+                        childToPin = childToPin.getParent();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
                 childShapeGraphic = childToPin;
                 childToPin.giveParent(this);
             }

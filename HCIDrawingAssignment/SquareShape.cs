@@ -22,6 +22,9 @@ namespace HCIDrawingAssignment
             type = "Square";
             startPoint = passedStartPoint;
             endPoint = passedEndPoint;
+            childShapeGraphic = null;
+            parentShapeGraphic = null;
+            copyId = -1;
         }
     }
 }
