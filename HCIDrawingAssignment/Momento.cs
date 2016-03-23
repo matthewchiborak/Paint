@@ -12,6 +12,13 @@ namespace HCIDrawingAssignment
 
         public Momento(List<ShapeGraphic> passedCanvasGraphicList)
         {
+            //Assign ids to all the graphics to reassign children and parents
+            int currentId = 0;
+            foreach (var myGraphic in passedCanvasGraphicList)
+            {
+                myGraphic.assignId(currentId++);
+            }
+
             canvasGraphicList = new List<ShapeGraphic>();
             foreach (var myGraphic in passedCanvasGraphicList)
             {
@@ -56,6 +63,22 @@ namespace HCIDrawingAssignment
                         canvasGraphicList.Add(new EllipseShape(myGraphic.getShapeColor(), myGraphic.getStartPoint(), myGraphic.getEndPoint()));
                     }
                 }
+            }
+
+            //Reassign the children and parents
+            int currentIndex = 0;
+            foreach (var myGraphic in passedCanvasGraphicList)
+            {
+                if(myGraphic.hasChild())
+                {
+                    canvasGraphicList.ElementAt(currentIndex).giveChild(canvasGraphicList.ElementAt(myGraphic.getChild().getId()));
+                }
+                if (myGraphic.hasParent())
+                {
+                    canvasGraphicList.ElementAt(currentIndex).giveParent(canvasGraphicList.ElementAt(myGraphic.getParent().getId()));
+                }
+
+                currentIndex++;
             }
         }
 

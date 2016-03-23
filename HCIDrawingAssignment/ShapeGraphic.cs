@@ -12,14 +12,18 @@ namespace HCIDrawingAssignment
         protected Color shapeColour;
         protected Point canvasPosition;
         protected ShapeGraphic childShapeGraphic;
+        protected ShapeGraphic parentShapeGraphic;
         protected string type;
         public Point startPoint;
         public Point endPoint;
         public List<LineShape> freehandLineList;
+        protected int copyId;
 
         public ShapeGraphic()
         {
             childShapeGraphic = null;
+            parentShapeGraphic = null;
+            copyId = -1;
         }
 
         public ShapeGraphic(Color selectedColour, Point selectedPosition)
@@ -27,6 +31,17 @@ namespace HCIDrawingAssignment
             shapeColour = selectedColour;
             canvasPosition = selectedPosition;
             childShapeGraphic = null;
+            parentShapeGraphic = null;
+            copyId = -1;
+        }
+
+        public void assignId(int givenId)
+        {
+            copyId = givenId;
+        }
+        public int getId()
+        {
+            return copyId;
         }
 
         public List<LineShape> getFreehandLineList()
@@ -53,10 +68,35 @@ namespace HCIDrawingAssignment
 
         public void moveToHere(Point location)
         {
+            Point displacement = new Point(location.X - startPoint.X, location.Y - startPoint.Y);
             endPoint.X = (endPoint.X - startPoint.X) + location.X;
             endPoint.Y = (endPoint.Y - startPoint.Y) + location.Y;
             startPoint.X = location.X;
             startPoint.Y = location.Y;
+            if (childShapeGraphic != null)
+            {
+                childShapeGraphic.moveChild(displacement);
+            }
+            if (parentShapeGraphic != null)
+            {
+                parentShapeGraphic.moveParent(displacement);
+            }
+        }
+        public void moveChild(Point displacement)
+        {
+            translate(displacement);
+            if(childShapeGraphic != null)
+            {
+                childShapeGraphic.moveChild(displacement);
+            }
+        }
+        public void moveParent(Point displacement)
+        {
+            translate(displacement);
+            if (parentShapeGraphic != null)
+            {
+                parentShapeGraphic.moveParent(displacement);
+            }
         }
         public void translate(Point displacement)
         {
@@ -134,17 +174,45 @@ namespace HCIDrawingAssignment
             if (childToPin == null)
             {
                 childShapeGraphic = childToPin;
+                childToPin.giveParent(this);
             }
             else
             {
                 childShapeGraphic.Pin(childToPin);
             }
         }
+        public void giveParent(ShapeGraphic parent)
+        {
+             parentShapeGraphic = parent;
+        }
+        public void giveChild(ShapeGraphic child)
+        {
+            childShapeGraphic = child;
+        }
+        public ShapeGraphic getParent()
+        {
+            return parentShapeGraphic;
+        }
+        public ShapeGraphic getChild()
+        {
+            return childShapeGraphic;
+        }
 
         //Check to see if child has a child
         public bool hasChild()
         {
             if(childShapeGraphic==null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public bool hasParent()
+        {
+            if (parentShapeGraphic == null)
             {
                 return false;
             }
