@@ -732,7 +732,21 @@ namespace HCIDrawingAssignment
 
         private void unpinButton_Click(object sender, EventArgs e)
         {
+            if (currentMode == "Polygon")
+            {
+                shapeCaretaker.add(new Momento(canvasGraphicList));
+                canvasGraphicList.Add(new PolygonShape(selectedColor, freehandLineList));
+                redrawAllGraphics();
+                freehandLineList = new List<LineShape>();
+                isDrawing = false;
+                firstPolygonPoint = true;
+            }
 
+            if (selectedIndex >= 0)
+            {
+                currentMode = "Unpin";
+                modeLabel.Text = "Unpin";
+            }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -922,8 +936,6 @@ namespace HCIDrawingAssignment
                 if (selectedIndex >= 0)
                 {
                     shapeCaretaker.add(new Momento(canvasGraphicList));
-                    //copiedGraphic = canvasGraphicList.ElementAt(selectedIndex);
-                    //canvasGraphicList.RemoveAt(selectedIndex);
 
                     int wantedIndex = 0;
                     foreach (var myGraphic in canvasGraphicList)
@@ -931,7 +943,6 @@ namespace HCIDrawingAssignment
                         if (myGraphic.checkIfCursorOn(e.Location) && wantedIndex != selectedIndex)
                         {
                             //Check if the shapes to be pins aren't already pinned to the shapes
-                            //if (!canvasGraphicList.ElementAt(selectedIndex).checkIfAlreadyPinned(myGraphic))
                             if(!checkIfPinned(canvasGraphicList.ElementAt(selectedIndex), myGraphic))
                             {
                                 canvasGraphicList.ElementAt(selectedIndex).Pin(myGraphic);
@@ -950,7 +961,33 @@ namespace HCIDrawingAssignment
                     redrawAllGraphics();
                     isDrawing = false;
                     selectedIndex = -1;
+                    selectedLabel.Text = "";
                 }
+            }
+            if(currentMode == "Unpin")
+            {
+                shapeCaretaker.add(new Momento(canvasGraphicList));
+
+                int wantedIndex = 0;
+                foreach (var myGraphic in canvasGraphicList)
+                {
+                    if (myGraphic.checkIfCursorOn(e.Location))
+                    {
+                        myGraphic.Unpin();
+                        currentMode = "Select";
+                        modeLabel.Text = "Shapes Unpinned";
+                        
+                        break;
+                    }
+                    else
+                    {
+                        wantedIndex++;
+                    }
+                }
+
+                isDrawing = true;
+                redrawAllGraphics();
+                isDrawing = false;
             }
             if (currentMode == "Select")
             {

@@ -84,7 +84,21 @@ namespace HCIDrawingAssignment
         }
         public void moveChild(Point displacement)
         {
-            translate(displacement);
+            if (type == "Polygon" || type == "Freehand")
+            {
+                foreach (var myLine in freehandLineList)
+                {
+                    myLine.translate(displacement);
+                }
+                startPoint.X = startPoint.X + displacement.X;
+                startPoint.Y = startPoint.Y + displacement.Y;
+                endPoint.X = endPoint.X + displacement.X;
+                endPoint.Y = endPoint.Y + displacement.Y;
+            }
+            else
+            {
+                translate(displacement);
+            }
             if(childShapeGraphic != null)
             {
                 childShapeGraphic.moveChild(displacement);
@@ -92,7 +106,21 @@ namespace HCIDrawingAssignment
         }
         public void moveParent(Point displacement)
         {
-            translate(displacement);
+            if (type == "Polygon" || type == "Freehand")
+            {
+                foreach (var myLine in freehandLineList)
+                {
+                    myLine.translate(displacement);
+                }
+                startPoint.X = startPoint.X + displacement.X;
+                startPoint.Y = startPoint.Y + displacement.Y;
+                endPoint.X = endPoint.X + displacement.X;
+                endPoint.Y = endPoint.Y + displacement.Y;
+            }
+            else
+            {
+                translate(displacement);
+            }
             if (parentShapeGraphic != null)
             {
                 parentShapeGraphic.moveParent(displacement);
@@ -118,6 +146,15 @@ namespace HCIDrawingAssignment
             startPoint.Y = location.Y;
             endPoint.X = endPoint.X + displacement.X;
             endPoint.Y = endPoint.Y + displacement.Y;
+            
+            if (childShapeGraphic != null)
+            {
+                childShapeGraphic.moveChild(displacement);
+            }
+            if (parentShapeGraphic != null)
+            {
+                parentShapeGraphic.moveParent(displacement);
+            }
         }
 
         public bool checkIfCursorOn(Point location)
@@ -303,18 +340,47 @@ namespace HCIDrawingAssignment
         }
 
         //Recursively find the last child and separate it
-        public ShapeGraphic Unpin()
+        public void Unpin()
         {
-            if(childShapeGraphic.hasChild())
+            ShapeGraphic tempChild = childShapeGraphic;
+            ShapeGraphic tempParent = parentShapeGraphic;
+
+            childShapeGraphic = new ShapeGraphic();
+            parentShapeGraphic = new ShapeGraphic();
+            childShapeGraphic = null;
+            parentShapeGraphic = null;
+
+            if (tempChild != null)
             {
-                return childShapeGraphic.Unpin();
+                if (tempParent == null)
+                {
+                    tempChild.removeParent();
+                }
+                else
+                {
+                    tempChild.giveParent(tempParent);
+                }
             }
-            else
+            if (tempParent != null)
             {
-                ShapeGraphic temp = childShapeGraphic;
-                childShapeGraphic = null;
-                return temp;
+                if (tempChild == null)
+                {
+                    tempParent.removeChild();
+                }
+                else
+                {
+                    tempParent.giveChild(tempChild);
+                }
             }
+        }
+
+        public void removeParent()
+        {
+            parentShapeGraphic = null;
+        }
+        public void removeChild()
+        {
+            childShapeGraphic = null;
         }
 
         //Draw function for the inherited
