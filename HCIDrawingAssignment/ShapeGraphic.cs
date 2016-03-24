@@ -66,6 +66,7 @@ namespace HCIDrawingAssignment
             return shapeColour;
         }
 
+        //Move the shape to the specified location
         public void moveToHere(Point location)
         {
             Point displacement = new Point(location.X - startPoint.X, location.Y - startPoint.Y);
@@ -82,6 +83,8 @@ namespace HCIDrawingAssignment
                 parentShapeGraphic.moveParent(displacement);
             }
         }
+
+        //Recursively move all the children in a chain based on a current displacement
         public void moveChild(Point displacement)
         {
             if (type == "Polygon" || type == "Freehand")
@@ -104,6 +107,7 @@ namespace HCIDrawingAssignment
                 childShapeGraphic.moveChild(displacement);
             }
         }
+        //Do the same for the parents as did the children above
         public void moveParent(Point displacement)
         {
             if (type == "Polygon" || type == "Freehand")
@@ -126,6 +130,7 @@ namespace HCIDrawingAssignment
                 parentShapeGraphic.moveParent(displacement);
             }
         }
+        //Translate a shape a specified amount
         public void translate(Point displacement)
         {
             startPoint.X = startPoint.X + displacement.X; 
@@ -134,10 +139,12 @@ namespace HCIDrawingAssignment
             endPoint.Y = endPoint.Y + displacement.Y;
         }
 
+        //Move a polygon or freehand shape to a specified location
         public void movePolygonOrFreehandToHere(Point location)
         {
             Point displacement = new Point(location.X - startPoint.X, location.Y - startPoint.Y);
 
+            //Move all the lines that make up the shape
             foreach(var myLine in freehandLineList)
             {
                 myLine.translate(displacement);
@@ -147,6 +154,7 @@ namespace HCIDrawingAssignment
             endPoint.X = endPoint.X + displacement.X;
             endPoint.Y = endPoint.Y + displacement.Y;
             
+            //Recursively move the shape's children and parents
             if (childShapeGraphic != null)
             {
                 childShapeGraphic.moveChild(displacement);
@@ -157,6 +165,7 @@ namespace HCIDrawingAssignment
             }
         }
 
+        //Check if a specified location is inside bounding rectangle of the shape
         public bool checkIfCursorOn(Point location)
         {
             Point tempStart = startPoint;
@@ -205,6 +214,7 @@ namespace HCIDrawingAssignment
             }
         }
 
+        //Returns true if a passed shape is pinned to the shape in any way
         public bool checkIfAlreadyPinned(ShapeGraphic childToPin)
         {
             bool result = false;
