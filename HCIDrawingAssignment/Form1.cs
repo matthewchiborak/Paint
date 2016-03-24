@@ -284,16 +284,17 @@ namespace HCIDrawingAssignment
                 {
                     //Get the lines
                     freehandLineList = new List<LineShape>();
-                    List<LineShape> tempLineList = copiedParent.getFreehandLineList();
+                    List<LineShape> tempLineList = copiedParent.getChild().getFreehandLineList();
 
                     foreach (var myLine in tempLineList)
                     {
                         freehandLineList.Add(new LineShape(myLine.getShapeColor(), myLine.getStartPoint(), myLine.getEndPoint()));
                     }
 
-                    newShape = new FreehandShape(copiedParent.getShapeColor(), freehandLineList);
+                    newShape = new FreehandShape(copiedParent.getChild().getShapeColor(), freehandLineList);
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    newShape.movePolygonOrFreehandToHere(midScreen);
+                    //newShape.movePolygonOrFreehandToHere(midScreen);
+                    newShape.giveParent(newParent);
                     canvasGraphicList.Add(newShape);
                 if (copiedParent.getChild().hasChild())
                 {
@@ -302,38 +303,41 @@ namespace HCIDrawingAssignment
                 freehandLineList = new List<LineShape>();
 
                 }
-                if (copiedParent.getShapeType() == "Line")
+                if (copiedParent.getChild().getShapeType() == "Line")
                 {
-                    newShape = new LineShape(copiedParent.getShapeColor(), copiedParent.getStartPoint(), copiedParent.getEndPoint());
+                    newShape = new LineShape(copiedParent.getChild().getShapeColor(), copiedParent.getChild().getStartPoint(), copiedParent.getChild().getEndPoint());
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    newShape.moveToHere(midScreen);
-                    canvasGraphicList.Add(newShape);
+                    //newShape.moveToHere(midScreen);
+                newShape.giveParent(newParent);
+                canvasGraphicList.Add(newShape);
                     if (copiedParent.getChild().hasChild())
                     {
                         newShape.giveChild(pasteChild(copiedParent.getChild(), newShape));
                     }
                 }
-                if (copiedParent.getShapeType() == "Rectangle" || copiedParent.getShapeType() == "Square")
+                if (copiedParent.getChild().getShapeType() == "Rectangle" || copiedParent.getChild().getShapeType() == "Square")
                 {
                     
 
-                    if (copiedParent.getShapeType() == "Square")
+                    if (copiedParent.getChild().getShapeType() == "Square")
                     {
-                        newShape = new SquareShape(copiedParent.getShapeColor(), copiedParent.getStartPoint(), copiedParent.getEndPoint());
+                        newShape = new SquareShape(copiedParent.getChild().getShapeColor(), copiedParent.getChild().getStartPoint(), copiedParent.getChild().getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        newShape.moveToHere(midScreen);
-                        canvasGraphicList.Add(newShape);
+                        //newShape.moveToHere(midScreen);
+                    newShape.giveParent(newParent);
+                    canvasGraphicList.Add(newShape);
                         if (copiedParent.getChild().hasChild())
                         {
                             newShape.giveChild(pasteChild(copiedParent.getChild(), newShape));
                         }
                 }
-                    else if (copiedParent.getShapeType() == "Rectangle")
+                    else if (copiedParent.getChild().getShapeType() == "Rectangle")
                     {
-                        newShape = new RectangleShape(copiedParent.getShapeColor(), copiedParent.getStartPoint(), copiedParent.getEndPoint());
+                        newShape = new RectangleShape(copiedParent.getChild().getShapeColor(), copiedParent.getChild().getStartPoint(), copiedParent.getChild().getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        newShape.moveToHere(midScreen);
-                        canvasGraphicList.Add(newShape);
+                        //newShape.moveToHere(midScreen);
+                    newShape.giveParent(newParent);
+                    canvasGraphicList.Add(newShape);
                         if (copiedParent.getChild().hasChild())
                         {
                             newShape.giveChild(pasteChild(copiedParent.getChild(), newShape));
@@ -343,27 +347,29 @@ namespace HCIDrawingAssignment
                     
                 }
 
-                if (copiedParent.getShapeType() == "Ellipse" || copiedParent.getShapeType() == "Circle")
+                if (copiedParent.getChild().getShapeType() == "Ellipse" || copiedParent.getChild().getShapeType() == "Circle")
                 {
                 
 
-                    if (copiedParent.getShapeType() == "Circle")
+                    if (copiedParent.getChild().getShapeType() == "Circle")
                     {
-                        newShape = new CircleShape(copiedParent.getShapeColor(), copiedParent.getStartPoint(), copiedParent.getEndPoint());
+                        newShape = new CircleShape(copiedParent.getChild().getShapeColor(), copiedParent.getChild().getStartPoint(), copiedParent.getChild().getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        newShape.moveToHere(midScreen);
-                        canvasGraphicList.Add(newShape);
+                        //newShape.moveToHere(midScreen);
+                    newShape.giveParent(newParent);
+                    canvasGraphicList.Add(newShape);
                         if (copiedParent.getChild().hasChild())
                         {
                             newShape.giveChild(pasteChild(copiedParent.getChild(), newShape));
                         }
                 }
-                    else if (copiedParent.getShapeType() == "Ellipse")
+                    else if (copiedParent.getChild().getShapeType() == "Ellipse")
                     {
-                        newShape = new EllipseShape(copiedParent.getShapeColor(), copiedParent.getStartPoint(), copiedParent.getEndPoint());
+                        newShape = new EllipseShape(copiedParent.getChild().getShapeColor(), copiedParent.getChild().getStartPoint(), copiedParent.getChild().getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        newShape.moveToHere(midScreen);
-                        canvasGraphicList.Add(newShape);
+                        //newShape.moveToHere(midScreen);
+                    newShape.giveParent(newParent);
+                    canvasGraphicList.Add(newShape);
                         if (copiedParent.getChild().hasChild())
                         {
                             newShape.giveChild(pasteChild(copiedParent.getChild(), newShape));
@@ -371,20 +377,21 @@ namespace HCIDrawingAssignment
                 }
                     
                 }
-                if (copiedParent.getShapeType() == "Polygon")
+                if (copiedParent.getChild().getShapeType() == "Polygon")
                 {
                     //Get the lines
                     freehandLineList = new List<LineShape>();
-                    List<LineShape> tempLineList = copiedParent.getFreehandLineList();
+                    List<LineShape> tempLineList = copiedParent.getChild().getFreehandLineList();
 
                     foreach (var myLine in tempLineList)
                     {
                         freehandLineList.Add(new LineShape(myLine.getShapeColor(), myLine.getStartPoint(), myLine.getEndPoint()));
                     }
 
-                    newShape = new PolygonShape(copiedParent.getShapeColor(), freehandLineList);
+                    newShape = new PolygonShape(copiedParent.getChild().getShapeColor(), freehandLineList);
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    newShape.movePolygonOrFreehandToHere(midScreen);
+                    //newShape.movePolygonOrFreehandToHere(midScreen);
+                    newShape.giveParent(newParent);
                     canvasGraphicList.Add(newShape);
                     if (copiedParent.getChild().hasChild())
                     {
@@ -406,20 +413,21 @@ namespace HCIDrawingAssignment
 
 
             //Create the shape
-            if (copiedChild.getParent().getShapeType() == "Freehand")
+            if (copiedChild.getParent().getShapeType() == "Freehand") //TODO pasting pinned shapes broken
             {
                 //Get the lines
                 freehandLineList = new List<LineShape>();
-                List<LineShape> tempLineList = copiedChild.getFreehandLineList();
+                List<LineShape> tempLineList = copiedChild.getParent().getFreehandLineList();
 
                 foreach (var myLine in tempLineList)
                 {
                     freehandLineList.Add(new LineShape(myLine.getShapeColor(), myLine.getStartPoint(), myLine.getEndPoint()));
                 }
 
-                newShape = new FreehandShape(copiedChild.getShapeColor(), freehandLineList);
+                newShape = new FreehandShape(copiedChild.getParent().getShapeColor(), freehandLineList);
                 Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                newShape.movePolygonOrFreehandToHere(midScreen);
+               // newShape.movePolygonOrFreehandToHere(midScreen);
+                newShape.giveChild(newChild);
                 canvasGraphicList.Add(newShape);
                 if (copiedChild.getParent().hasParent())
                 {
@@ -428,37 +436,40 @@ namespace HCIDrawingAssignment
                 freehandLineList = new List<LineShape>();
 
             }
-            if (copiedChild.getShapeType() == "Line")
+            if (copiedChild.getParent().getShapeType() == "Line")
             {
-                newShape = new LineShape(copiedChild.getShapeColor(), copiedChild.getStartPoint(), copiedChild.getEndPoint());
+                newShape = new LineShape(copiedChild.getParent().getShapeColor(), copiedChild.getParent().getStartPoint(), copiedChild.getParent().getEndPoint());
                 Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                newShape.moveToHere(midScreen);
+                //newShape.moveToHere(midScreen);
+                newShape.giveChild(newChild);
                 canvasGraphicList.Add(newShape);
                 if (copiedChild.getParent().hasParent())
                 {
                     newShape.giveParent(pasteParent(copiedChild.getParent(), newShape));
                 }
             }
-            if (copiedChild.getShapeType() == "Rectangle" || copiedChild.getShapeType() == "Square")
+            if (copiedChild.getParent().getShapeType() == "Rectangle" || copiedChild.getParent().getShapeType() == "Square")
             {
 
 
-                if (copiedChild.getShapeType() == "Square")
+                if (copiedChild.getParent().getShapeType() == "Square")
                 {
-                    newShape = new SquareShape(copiedChild.getShapeColor(), copiedChild.getStartPoint(), copiedChild.getEndPoint());
+                    newShape = new SquareShape(copiedChild.getParent().getShapeColor(), copiedChild.getParent().getStartPoint(), copiedChild.getParent().getEndPoint());
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    newShape.moveToHere(midScreen);
+                    //newShape.moveToHere(midScreen);
+                    newShape.giveChild(newChild);
                     canvasGraphicList.Add(newShape);
                     if (copiedChild.getParent().hasParent())
                     {
                         newShape.giveParent(pasteParent(copiedChild.getParent(), newShape));
                     }
                 }
-                else if (copiedChild.getShapeType() == "Rectangle")
+                else if (copiedChild.getParent().getShapeType() == "Rectangle")
                 {
-                    newShape = new RectangleShape(copiedChild.getShapeColor(), copiedChild.getStartPoint(), copiedChild.getEndPoint());
+                    newShape = new RectangleShape(copiedChild.getParent().getShapeColor(), copiedChild.getParent().getStartPoint(), copiedChild.getParent().getEndPoint());
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    newShape.moveToHere(midScreen);
+                    //newShape.moveToHere(midScreen);
+                    newShape.giveChild(newChild);
                     canvasGraphicList.Add(newShape);
                     if (copiedChild.getParent().hasParent())
                     {
@@ -469,26 +480,28 @@ namespace HCIDrawingAssignment
 
             }
 
-            if (copiedChild.getShapeType() == "Ellipse" || copiedChild.getShapeType() == "Circle")
+            if (copiedChild.getParent().getShapeType() == "Ellipse" || copiedChild.getParent().getShapeType() == "Circle")
             {
 
 
-                if (copiedChild.getShapeType() == "Circle")
+                if (copiedChild.getParent().getShapeType() == "Circle")
                 {
                     newShape = new CircleShape(copiedChild.getShapeColor(), copiedChild.getStartPoint(), copiedChild.getEndPoint());
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    newShape.moveToHere(midScreen);
+                    //newShape.moveToHere(midScreen);
+                    newShape.giveChild(newChild);
                     canvasGraphicList.Add(newShape);
                     if (copiedChild.getParent().hasParent())
                     {
                         newShape.giveParent(pasteParent(copiedChild.getParent(), newShape));
                     }
                 }
-                else if (copiedChild.getShapeType() == "Ellipse")
+                else if (copiedChild.getParent().getShapeType() == "Ellipse")
                 {
-                    newShape = new EllipseShape(copiedChild.getShapeColor(), copiedChild.getStartPoint(), copiedChild.getEndPoint());
+                    newShape = new EllipseShape(copiedChild.getParent().getShapeColor(), copiedChild.getParent().getStartPoint(), copiedChild.getParent().getEndPoint());
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    newShape.moveToHere(midScreen);
+                    //newShape.moveToHere(midScreen);
+                    newShape.giveChild(newChild);
                     canvasGraphicList.Add(newShape);
                     if (copiedChild.getParent().hasParent())
                     {
@@ -497,20 +510,21 @@ namespace HCIDrawingAssignment
                 }
 
             }
-            if (copiedChild.getShapeType() == "Polygon")
+            if (copiedChild.getParent().getShapeType() == "Polygon")
             {
                 //Get the lines
                 freehandLineList = new List<LineShape>();
-                List<LineShape> tempLineList = copiedChild.getFreehandLineList();
+                List<LineShape> tempLineList = copiedChild.getParent().getFreehandLineList();
 
                 foreach (var myLine in tempLineList)
                 {
                     freehandLineList.Add(new LineShape(myLine.getShapeColor(), myLine.getStartPoint(), myLine.getEndPoint()));
                 }
 
-                newShape = new PolygonShape(copiedChild.getShapeColor(), freehandLineList);
+                newShape = new PolygonShape(copiedChild.getParent().getShapeColor(), freehandLineList);
                 Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                newShape.movePolygonOrFreehandToHere(midScreen);
+                //newShape.movePolygonOrFreehandToHere(midScreen);
+                newShape.giveChild(newChild);
                 canvasGraphicList.Add(newShape);
                 if (copiedChild.getParent().hasParent())
                 {
@@ -561,7 +575,7 @@ namespace HCIDrawingAssignment
 
                     FreehandShape tempShape = new FreehandShape(copiedGraphic.getShapeColor(), freehandLineList);
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    tempShape.movePolygonOrFreehandToHere(midScreen);
+                    //tempShape.movePolygonOrFreehandToHere(midScreen);
                     
                     if(copiedGraphic.hasChild())
                     {
@@ -584,10 +598,16 @@ namespace HCIDrawingAssignment
                     shapeCaretaker.add(new Momento(canvasGraphicList));
                     LineShape tempLine = new LineShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
                     Point midScreen = new Point(canvasBox.Width/2,canvasBox.Height/2);
-                    tempLine.moveToHere(midScreen);
+                    //tempLine.moveToHere(midScreen);
                     canvasGraphicList.Add(tempLine);
-                    pasteChild(copiedGraphic, tempLine);
-                    pasteParent(copiedGraphic, tempLine);
+                    if (copiedGraphic.hasChild())
+                    {
+                        tempLine.giveChild(pasteChild(copiedGraphic, tempLine));
+                    }
+                    if (copiedGraphic.hasParent())
+                    {
+                        tempLine.giveParent(pasteParent(copiedGraphic, tempLine));
+                    }
                     isDrawing = true;
                     redrawAllGraphics();
                     isDrawing = false;
@@ -600,19 +620,31 @@ namespace HCIDrawingAssignment
                     {
                         SquareShape tempShape = new SquareShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        tempShape.moveToHere(midScreen);
+                        //tempShape.moveToHere(midScreen);
                         canvasGraphicList.Add(tempShape);
-                        pasteChild(copiedGraphic, tempShape);
-                        pasteParent(copiedGraphic, tempShape);
+                        if (copiedGraphic.hasChild())
+                        {
+                            tempShape.giveChild(pasteChild(copiedGraphic, tempShape));
+                        }
+                        if (copiedGraphic.hasParent())
+                        {
+                            tempShape.giveParent(pasteParent(copiedGraphic, tempShape));
+                        }
                     }
                     else if (copiedGraphic.getShapeType() == "Rectangle")
                     {
                         RectangleShape tempShape = new RectangleShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        tempShape.moveToHere(midScreen);
+                        //tempShape.moveToHere(midScreen);
                         canvasGraphicList.Add(tempShape);
-                        pasteChild(copiedGraphic, tempShape);
-                        pasteParent(copiedGraphic, tempShape);
+                        if (copiedGraphic.hasChild())
+                        {
+                            tempShape.giveChild(pasteChild(copiedGraphic, tempShape));
+                        }
+                        if (copiedGraphic.hasParent())
+                        {
+                            tempShape.giveParent(pasteParent(copiedGraphic, tempShape));
+                        }
                     }
 
                     isDrawing = true;
@@ -629,19 +661,31 @@ namespace HCIDrawingAssignment
                     {
                         CircleShape tempShape = new CircleShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        tempShape.moveToHere(midScreen);
+                        //tempShape.moveToHere(midScreen);
                         canvasGraphicList.Add(tempShape);
-                        pasteChild(copiedGraphic, tempShape);
-                        pasteParent(copiedGraphic, tempShape);
+                        if (copiedGraphic.hasChild())
+                        {
+                            tempShape.giveChild(pasteChild(copiedGraphic, tempShape));
+                        }
+                        if (copiedGraphic.hasParent())
+                        {
+                            tempShape.giveParent(pasteParent(copiedGraphic, tempShape));
+                        }
                     }
                     else if (copiedGraphic.getShapeType() == "Ellipse")
                     {
                         EllipseShape tempShape = new EllipseShape(copiedGraphic.getShapeColor(), copiedGraphic.getStartPoint(), copiedGraphic.getEndPoint());
                         Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                        tempShape.moveToHere(midScreen);
+                        //tempShape.moveToHere(midScreen);
                         canvasGraphicList.Add(tempShape);
-                        pasteChild(copiedGraphic, tempShape);
-                        pasteParent(copiedGraphic, tempShape);
+                        if (copiedGraphic.hasChild())
+                        {
+                            tempShape.giveChild(pasteChild(copiedGraphic, tempShape));
+                        }
+                        if (copiedGraphic.hasParent())
+                        {
+                            tempShape.giveParent(pasteParent(copiedGraphic, tempShape));
+                        }
                     }
                     isDrawing = true;
                     redrawAllGraphics();
@@ -662,10 +706,16 @@ namespace HCIDrawingAssignment
 
                     PolygonShape tempShape = new PolygonShape(copiedGraphic.getShapeColor(), freehandLineList);
                     Point midScreen = new Point(canvasBox.Width / 2, canvasBox.Height / 2);
-                    tempShape.movePolygonOrFreehandToHere(midScreen);
+                    //tempShape.movePolygonOrFreehandToHere(midScreen);
                     canvasGraphicList.Add(tempShape);
-                    pasteChild(copiedGraphic, tempShape);
-                    pasteParent(copiedGraphic, tempShape);
+                    if (copiedGraphic.hasChild())
+                    {
+                        tempShape.giveChild(pasteChild(copiedGraphic, tempShape));
+                    }
+                    if (copiedGraphic.hasParent())
+                    {
+                        tempShape.giveParent(pasteParent(copiedGraphic, tempShape));
+                    }
                     freehandLineList = new List<LineShape>();
                     isDrawing = true;
                     redrawAllGraphics();

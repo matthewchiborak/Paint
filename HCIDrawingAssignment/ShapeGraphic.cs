@@ -383,10 +383,6 @@ namespace HCIDrawingAssignment
             childShapeGraphic = null;
         }
 
-        //Draw function for the inherited
-        public void draw()
-        {
-
-        }
+        
     }
 }
